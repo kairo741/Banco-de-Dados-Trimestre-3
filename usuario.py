@@ -69,14 +69,16 @@ def update_usuario(conexao):
                 novo = input("Insira a nova que deseja alterar: ")
                 while(True):
                       
-                    confirmar = input("Confime a senha")
+                    confirmar = input("Confirme a senha: ")
                     if(confirmar == novo):
                         print("Alterando...")
                         sql_alterar = """
                             UPDATE usuario
-                            SET senha = {}
-                            WHERE rowid = {}
+                            SET senha = '{}'
+                            WHERE rowid = {};
                             """.format(novo,rowid)
+                        print(sql_alterar)
+
                         cursor.execute(sql_alterar)
                         conexao.commit()
 
