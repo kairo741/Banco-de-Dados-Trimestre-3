@@ -45,6 +45,68 @@ def listar_usuario(conexao):
 
 
 
+
+
+#Algoritmo para dar UPDATE em um usuário
+def update_usuario(conexao):
+    cursor = conexao.cursor()
+    rowid = int(input("Qual o ID do usuario que deseja dar update? "))
+
+    sql = """
+    SELECT nome, login,senha FROM usuario
+    WHERE rowid = {} 
+    """.format(rowid)
+    cursor.execute(sql)
+
+    
+    lista = cursor.fetchall()
+    excluir = input('Deseja realmente dar UPDATE no usuário "{}" que tem o login "{}"? (S/N)'.format(lista[0][0], lista[0][1]))
+
+    if (excluir == 'S' or excluir == 's'):
+        while(True):
+            confirmar = input("Insira a senha para alterar: ")
+            if(confirmar == lista[0][2]):
+                novo = input("Insira a nova que deseja alterar: ")
+                while(True):
+                      
+                    confirmar = input("Confime a senha")
+                    if(confirmar == novo):
+                        print("Alterando...")
+                        sql_alterar = """
+                            UPDATE usuario
+                            SET senha = {}
+                            WHERE rowid = {}
+                            """.format(novo,rowid)
+                        cursor.execute(sql_alterar)
+                        conexao.commit()
+
+                        print("Você alterou a senha do Usuário {}!".format(rowid))
+                        break
+                    else:
+                        print("Confirmação incorreta!")
+                    continuar = input("Deseja continuar (S/N)? ")
+                    if (continuar == 'N' or continuar == 'n'):
+                        print("Você saiu!")
+                        break
+
+            else:
+                print("Senha incorreta")
+
+            continuar = input("Deseja continuar (S/N)? ")
+            if (continuar == 'N' or continuar == 'n'):
+                print("Você saiu!")
+                break
+
+
+    else:
+        print("Até mais")
+
+
+
+
+
+
+#Algoritmo para excluir de dados.
 def excluir_usuario(conexao):
     cursor = conexao.cursor()
     rowid = int(input("Qual o ID do usuario que deseja excluir? "))
@@ -54,18 +116,15 @@ def excluir_usuario(conexao):
     WHERE rowid = {} 
     """.format(rowid)
     cursor.execute(sql)
-
-    
-
     lista = cursor.fetchall()
-    excluir = input('Deseja realmente excluir o usuário "{}" que tem o login "{}"? (S/N)'.format(lista[0][0], lista[0][1]))
+    excluir = input('Deseja dar excluir o usuário "{}" que tem o login "{}"? (S/N)'.format(lista[0][0], lista[0][1]))
 
     if (excluir == 'S' or excluir == 's'):
         while(True):
-            confirmar = input("Insira a senha para excluir: ")
+            confirmar = input("Insira a senha para alterar: ")
             if(confirmar == lista[0][2]):
                 print("Excluindo...")
-                
+
                 sql_excluir = """
                     DELETE FROM usuario
                     WHERE rowid = {}
@@ -83,7 +142,6 @@ def excluir_usuario(conexao):
             if (continuar == 'N' or continuar == 'n'):
                 print("Você saiu!")
                 break
-
 
     else:
         print("Até mais")
