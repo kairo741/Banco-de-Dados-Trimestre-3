@@ -58,13 +58,23 @@ def update_usuario(conexao):
     """.format(rowid)
     cursor.execute(sql)
 
-    
-    lista = cursor.fetchall()
-    excluir = input('Deseja realmente dar UPDATE no usuário "{}" que tem o login "{}"? (S/N)'.format(lista[0][0], lista[0][1]))
+    update = input("O que deseja alterar (Nome, Login ou Senha)? ")
 
-    if (excluir == 'S' or excluir == 's'):
+    if(update == 'senha' or update == 'Senha'):
+        update_x = 'Senha'
+
+    elif(update == 'Login' or update == 'login'):
+        update_x = 'Login'
+    elif(update == 'nome' or update == 'Nome'):
+        update_x = 'Nome'
+
+
+    lista = cursor.fetchall()
+    update_senha = input('Deseja realmente dar alterar a senha do usuário "{}" que tem o login "{}"? (S/N)'.format(lista[0][0], lista[0][1]))
+
+    if (update_senha == 'S' or update_senha == 's'):
         while(True):
-            confirmar = input("Insira a senha para alterar: ")
+            confirmar = input("Insira a senha atual para alterar: ")
             if(confirmar == lista[0][2]):
                 novo = input("Insira a nova que deseja alterar: ")
                 while(True):
