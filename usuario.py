@@ -1,3 +1,5 @@
+import time
+
 def criarTabelaUsuario(conexao):
 
     cursor = conexao.cursor()
@@ -140,7 +142,12 @@ def excluir_usuario(conexao):
         while(True):
             confirmar = input("Insira a senha (atual) para alterar: ")
             if(confirmar == lista[0][2]):
-                print("Excluindo...")
+                print("Excluindo", end='', flush=True)
+                for i in range(5):
+                    print('.', end='', flush=True)
+                    time.sleep(0.5)
+
+                print("")
 
                 sql_excluir = """
                     DELETE FROM usuario
