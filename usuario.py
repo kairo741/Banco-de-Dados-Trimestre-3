@@ -61,38 +61,43 @@ def update_usuario(conexao):
     update = input("O que deseja alterar (Nome, Login ou Senha)? ")
 
     if(update == 'senha' or update == 'Senha'):
-        update_x = 'Senha'
+        update_x = 'a Senha'
+        noSql = "senha"
+
 
     elif(update == 'Login' or update == 'login'):
-        update_x = 'Login'
+        update_x = 'o Login'
+        noSql = "login"
+
+
     elif(update == 'nome' or update == 'Nome'):
-        update_x = 'Nome'
+        update_x = 'o Nome'
+        noSql = "nome"
 
 
     lista = cursor.fetchall()
-    update_senha = input('Deseja realmente dar alterar a senha do usuário "{}" que tem o login "{}"? (S/N)'.format(lista[0][0], lista[0][1]))
+    update = input('Deseja realmente dar alterar {} do usuário "{}" que tem o login "{}"? (S/N)'.format(update_x, lista[0][0], lista[0][1]))
 
-    if (update_senha == 'S' or update_senha == 's'):
+    if (update == 'S' or update == 's'):
         while(True):
-            confirmar = input("Insira a senha atual para alterar: ")
+            confirmar = input("Insira a senha: ")
             if(confirmar == lista[0][2]):
-                novo = input("Insira a nova que deseja alterar: ")
+                novo = input("Insira {} novo(a) que deseja alterar: ".format(update_x))
                 while(True):
                       
-                    confirmar = input("Confirme a senha: ")
+                    confirmar = input("Confirme {}: ".format(update_x))
                     if(confirmar == novo):
                         print("Alterando...")
                         sql_alterar = """
                             UPDATE usuario
-                            SET senha = '{}'
+                            SET {} = '{}'
                             WHERE rowid = {};
-                            """.format(novo,rowid)
-                        print(sql_alterar)
+                            """.format(noSql,novo,rowid)
 
                         cursor.execute(sql_alterar)
                         conexao.commit()
 
-                        print("Você alterou a senha do Usuário {}!".format(rowid))
+                        print("Você alterou {} do Usuário {}!".format(update_x,rowid))
                         break
                     else:
                         print("Confirmação incorreta!")
